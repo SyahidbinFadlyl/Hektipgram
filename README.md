@@ -1,10 +1,10 @@
 # Hektipgram
 sosialmedia
 
+MVC - DQL SETUP - Express - Sequelize
+npm init -y
+npm i pg express ejs sequelize express-fileupload
+touch .gitignore
 
-npm install --save sequelize
-npm install --save pg
-npm install -D sequelize-cli
-npm i -D nodemon
-npm i express-fileupload
-npm i express ejs
+npm i -D nodemon sequelize-cli 
+npx sequelize-cli init
