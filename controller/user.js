@@ -23,6 +23,9 @@ class Controller {
     }
 
     static login(req, res) {
+        if(req.session.userId) {
+            return res.redirect("/home")
+        }
         res.render('login', { error: req.query.err })
     }
 
@@ -71,13 +74,14 @@ class Controller {
                         caption: {
                             [Op.iLike]: `%${search}%`
                         }
-                    }
+                    },
                 ]
             }
         }
 
         Post.findAll(param)
             .then(post => {
+                // res.send(post)
                 res.render('home', { post, timeSince, userLogin })
             })
             .catch(err => {
@@ -124,9 +128,10 @@ class Controller {
 
     static likePost(req, res) {
         const id = +req.params.id
+        console.log(id);
         Post.increment("like", { by: 1, where: { id: id } })
             .then(post => {
-                res.redirect("/home")
+                res.redirect(`/comment/${id}`)
             })
             .catch(err => {
                 res.send(err)
@@ -135,20 +140,28 @@ class Controller {
 
     static unlikePost(req, res) {
         const id = +req.params.id
-        Post.decrement("like", { by: 1, where: { id: id } })
-            .then(post => {
-                res.redirect("/home")
-            })
-            .catch(err => {
-                res.send(err)
-            })
+        Post.findByPk(id)
+        .then(post => {
+            if (post.like > 0) {
+                return Post.decrement("like", { by: 1, where: { id: id } })
+            }
+        })
+        .then(() => {
+            res.redirect(`/comment/${id}`)
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
     static profile(req, res) {
         const userLogin = req.session.userId
+        console.log(userLogin);
         const id = +req.params.id;
         User.findByPk(id, { include: { all: true } })
             .then(user => {
+                console.log(user.id);
                 res.render('profile', { user , userLogin})
             })
             .catch(err => {
@@ -158,8 +171,13 @@ class Controller {
 
     static editProfile(req, res) {
         const userLogin = req.session.userId
+        
+        
         Profile.findByPk(+req.params.id, { include: User })
             .then(profile => {
+                if(userLogin !== profile.User.id) {
+                    return res.redirect("/home")
+                }
                 res.render('edit-profile', { profile , userLogin})
             })
             .catch(err => {
@@ -256,9 +274,11 @@ class Controller {
 
     static admin(req, res) {
         const userLogin = req.session.userId
+        if(!req.session.role) {
+            return res.redirect("/")
+        }
         User.findAll({ include: { all: true } })
-            .then(user => {
-                // res.send(user)
+            .then(user => {   
                 res.render("deleteUser", { user, timeSince, userLogin})
             })
             .catch(err => {
@@ -268,10 +288,10 @@ class Controller {
 
     static deleteUser(req, res) {
         const id = +req.params.id
-        if (req.session.role === false) {
-            throw "anda bukan admin"
+        if(!req.session.role) {
+            return res.redirect("/")
         }
-
+        
         User.findByPk(id)
             .then(user => {
                 if (!user || user.length === 0) {
