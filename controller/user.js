@@ -61,7 +61,7 @@ class Controller {
             order: [["createdAt", "desc"]],
             where: {}
         }
-
+        //res.send(post[0].User.userName)
         if (search) {
             param.where = {
                 ...param.where,
