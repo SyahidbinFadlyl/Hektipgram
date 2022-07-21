@@ -30,6 +30,7 @@ router.use((req, res, next) => {
 
 router.get("/home", Controller.home)
 router.get("/post", Controller.addPost)
+router.get("/profile", Controller.profile)
 router.post("/post", upload.single("imageUrl"), Controller.postAddPost)
 
 router.get("/comment/:PostId", Controller.commentSection)
