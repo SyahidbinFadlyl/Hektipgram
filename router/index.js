@@ -41,6 +41,6 @@ router.post("/comment/:PostId/:userId", Controller.addCommentPostId)
 router.get('/post/:id/edit', Controller.editPost)
 router.post('/post/:id/edit', Controller.postEditPost)
 router.get('/post/:id/delete', Controller.deletePost)
-
+router.get("/user/:id/delete", Controller.deleteUser)
 
 module.exports = router
