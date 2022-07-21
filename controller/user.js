@@ -62,11 +62,25 @@ class Controller {
     }
 
     static addPost(req, res) {
-        res.render('add-post')
+        Tag.findAll()
+            .then(tag => {
+                res.render('add-post', { user: req.session.userId, tag })
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 
     static postAddPost(req, res) {
-
+        //caption, imageUrl, like, UserId, TagId
+        let { TagId, UserId, caption } = req.body
+        Post.create({ caption, imageUrl: req.file.path, like: 0, UserId, TagId })
+            .then((_) => {
+                res.redirect('/home')
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 
     static commentSection(req, res) {
