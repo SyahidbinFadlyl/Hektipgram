@@ -58,7 +58,8 @@ class Controller {
         const search = req.query.search
         let param = {
             include: { all: true, nested: true },
-            order: [["createdAt", "desc"]]
+            order: [["createdAt", "desc"]],
+            where: {}
         }
 
         if (search) {
@@ -77,7 +78,6 @@ class Controller {
         Post.findAll(param)
             .then(post => {
                 res.render('home', { post, timeSince })
-                // res.send(post)
             })
             .catch(err => {
                 console.log(err);
