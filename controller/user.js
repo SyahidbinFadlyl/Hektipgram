@@ -56,6 +56,7 @@ class Controller {
 
     static home(req, res) {
         const search = req.query.search
+        const userLogin = req.session.userId
         let param = {
             include: { all: true, nested: true },
             order: [["createdAt", "desc"]],
@@ -77,19 +78,19 @@ class Controller {
 
         Post.findAll(param)
             .then(post => {
-                res.render('home', { post, timeSince })
+                res.render('home', { post, timeSince, userLogin })
             })
             .catch(err => {
-                console.log(err);
                 res.send(err)
             })
 
     }
 
     static addPost(req, res) {
+        const userLogin = req.session.userId
         Tag.findAll()
             .then(tag => {
-                res.render('add-post', { user: req.session.userId, tag })
+                res.render('add-post', { user: req.session.userId, tag , userLogin })
             })
             .catch(err => {
                 res.send(err)
@@ -97,6 +98,7 @@ class Controller {
     }
 
     static postAddPost(req, res) {
+       
         let { TagId, UserId, caption } = req.body
         Post.create({ caption, imageUrl: req.file.path, like: 0, UserId, TagId })
             .then((_) => {
@@ -108,11 +110,12 @@ class Controller {
     }
 
     static commentSection(req, res) {
+        const userLogin = req.session.userId
         const id = +req.params.PostId
         const userId = req.session.userId
         Post.findByPk(id, { include: { all: true, nested: true } })
             .then(post => {
-                res.render('post-comment', { post, timeSince, UserId: userId })
+                res.render('post-comment', { post, timeSince, UserId: userId, userLogin })
             })
             .catch(err => {
                 res.send(err)
@@ -142,9 +145,11 @@ class Controller {
     }
 
     static profile(req, res) {
-        User.findByPk(+req.session.userId, { include: { all: true } })
+        const userLogin = req.session.userId
+        const id = +req.params.id;
+        User.findByPk(id, { include: { all: true } })
             .then(user => {
-                res.render('profile', { user })
+                res.render('profile', { user , userLogin})
             })
             .catch(err => {
                 res.send(err)
@@ -152,9 +157,10 @@ class Controller {
     }
 
     static editProfile(req, res) {
+        const userLogin = req.session.userId
         Profile.findByPk(+req.params.id, { include: User })
             .then(profile => {
-                res.render('edit-profile', { profile })
+                res.render('edit-profile', { profile , userLogin})
             })
             .catch(err => {
                 res.send(err)
@@ -162,6 +168,7 @@ class Controller {
     }
 
     static postProfile(req, res) {
+        
         let { fullName, gender, dateOfBirth, UserId, userName, email } = req.body
         Profile.update({ fullName, gender, dateOfBirth, UserId }, { where: { id: +req.params.id } })
             .then((_) => {
@@ -176,6 +183,7 @@ class Controller {
     }
 
     static addCommentPostId(req, res) {
+        
         const { PostId, userId } = req.params
         const { comment } = req.body
         Comment.create({ comment, PostId, UserId: userId })
@@ -188,6 +196,7 @@ class Controller {
     }
 
     static editPost(req, res) {
+        const userLogin = req.session.userId
         const id = +req.params.id
         let tag;
         Tag.findAll()
@@ -196,7 +205,7 @@ class Controller {
                 return Post.findByPk(id)
             })
             .then(post => {
-                res.render("editPost", { tag, post })
+                res.render("editPost", { tag, post, userLogin })
             })
             .catch(err => {
                 res.send(err)
@@ -211,14 +220,12 @@ class Controller {
                 res.redirect(`/comment/${id}`)
             })
             .catch(err => {
-                console.log(err);
                 res.send(err)
             })
     }
 
     static deletePost(req, res) {
         const postId = +req.params.id
-        console.log(postId);
         Post.findByPk(postId)
             .then(post => {
                 // res.send(post)
@@ -236,7 +243,6 @@ class Controller {
                 res.redirect("/home")
             })
             .catch(err => {
-                console.log(err);
                 res.send(err)
             })
     }
@@ -249,11 +255,11 @@ class Controller {
     }
 
     static admin(req, res) {
-
+        const userLogin = req.session.userId
         User.findAll({ include: { all: true } })
             .then(user => {
                 // res.send(user)
-                res.render("deleteUser", { user, timeSince })
+                res.render("deleteUser", { user, timeSince, userLogin})
             })
             .catch(err => {
                 res.send(err)
@@ -283,7 +289,6 @@ class Controller {
                 res.redirect("/admin")
             })
             .catch(err => {
-                console.log(err);
                 res.send(err)
             })
     }

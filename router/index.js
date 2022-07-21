@@ -31,7 +31,7 @@ router.use((req, res, next) => {
 router.get("/admin", Controller.admin)
 router.get("/home", Controller.home)
 router.get("/post", Controller.addPost)
-router.get("/profile", Controller.profile)
+router.get("/profile/:id", Controller.profile)
 router.post("/post", upload.single("imageUrl"), Controller.postAddPost)
 router.get("/logout", Controller.logout)
 router.get("/profile/edit/:id", Controller.editProfile)
