@@ -38,6 +38,7 @@ router.get("/profile/edit/:id", Controller.editProfile)
 router.post("/profile/edit/:id", Controller.postProfile)
 router.get("/comment/:PostId", Controller.commentSection)
 router.post("/comment/:PostId/:userId", Controller.addCommentPostId)
+router.get('/post/:id/edit', Controller.editPost)
 router.get('/post/:id/delete', Controller.deletePost)
 
 
