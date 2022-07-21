@@ -32,6 +32,8 @@ router.get("/home", Controller.home)
 router.get("/post", Controller.addPost)
 router.get("/profile", Controller.profile)
 router.post("/post", upload.single("imageUrl"), Controller.postAddPost)
+router.get("/logout", Controller.logout)
+
 router.get("/profile/edit/:id", Controller.editProfile)
 router.post("/profile/edit/:id", Controller.postProfile)
 router.get("/comment/:PostId", Controller.commentSection)

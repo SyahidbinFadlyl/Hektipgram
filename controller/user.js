@@ -11,7 +11,6 @@ class Controller {
         const { fullName, gender, dateOfBirth, userName, email, password } = req.body
         User.create({ userName, email, password })
             .then(user => {
-                console.log(user.id);
                 return Profile.create({ fullName, gender, dateOfBirth, UserId: user.id })
             })
             .then(userProfile => {
@@ -73,7 +72,6 @@ class Controller {
     }
 
     static postAddPost(req, res) {
-        //caption, imageUrl, like, UserId, TagId
         let { TagId, UserId, caption } = req.body
         Post.create({ caption, imageUrl: req.file.path, like: 0, UserId, TagId })
             .then((_) => {
@@ -129,7 +127,7 @@ class Controller {
     }
 
     static editProfile(req, res) {
-        Profile.findByPk(+req.params.id)
+        Profile.findByPk(+req.params.id, { include: User })
             .then(profile => {
                 res.render('edit-profile', { profile })
             })
@@ -139,8 +137,11 @@ class Controller {
     }
 
     static postProfile(req, res) {
-        let { fullName, gender, dateOfBirth, UserId } = req.body
+        let { fullName, gender, dateOfBirth, UserId, userName, email } = req.body
         Profile.update({ fullName, gender, dateOfBirth, UserId }, { where: { id: +req.params.id } })
+            .then((_) => {
+                return User.update({ userName, email }, { where: { id: +UserId } })
+            })
             .then((_) => {
                 res.redirect('/profile')
             })
@@ -162,7 +163,7 @@ class Controller {
     }
 
     static editPost(req, res) {
-
+        //tes
     }
 
     static postEditPost(req, res) {
@@ -173,6 +174,12 @@ class Controller {
 
     }
 
+    static logout(req, res) {
+        req.session.destroy((err) => {
+            if (err) return res.send(err)
+            else return res.redirect('/')
+        })
+    }
 
 }
 
