@@ -21,8 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     caption: DataTypes.TEXT,
     imageUrl: DataTypes.TEXT,
     TagId: DataTypes.INTEGER,
-    UserId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    like: DataTypes.INTEGER,
   }, {
+    hooks:{
+      beforeCreate(post, options) {
+        post.like = 0
+      }
+    },
     sequelize,
     modelName: 'Post',
   });
