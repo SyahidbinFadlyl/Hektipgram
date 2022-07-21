@@ -2,7 +2,7 @@ const User = require("../controller/user")
 const router = require("express").Router()
 
 router.get("/", User.login)
+router.get("/register", User.register)
 router.get("/home", User.home)
 
-
-module.exports = router 
+module.exports = router
