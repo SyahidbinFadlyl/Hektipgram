@@ -27,15 +27,17 @@ class Controller {
 
     static postLogin(req, res) {
         const { email, password } = req.body
+        const inv = `invalid credentials`
         User.findOne({ where: { email } })
             .then(user => {
-                if (user) {
+                if (user && user.length !== 0) {
                     if (bcrypt.compareSync(password, user.password)) {
                         return res.redirect('/home')
                     } else {
-                        const inv = `invalid credentials`
                         return res.redirect(`/?err=${inv}`)
                     }
+                } else {
+                    return res.redirect(`/?err=${inv}`)
                 }
             })
             .catch(err => {
