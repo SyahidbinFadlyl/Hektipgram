@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     role: DataTypes.BOOLEAN
   }, {
+    hooks:{
+      beforeCreate(user, options) {
+        user.role = false
+      }
+    },
     sequelize,
     modelName: 'User',
   });
