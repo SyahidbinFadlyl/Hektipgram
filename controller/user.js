@@ -218,18 +218,25 @@ class Controller {
 
     static deletePost(req, res) {
         const postId = +req.params.id
+        console.log(postId);
         Post.findByPk(postId)
             .then(post => {
+                // res.send(post)
                 if (post.UserId !== req.session.userId) {
                     res.redirect("/home")
                 } else {
-                    return Post.destroy({ where: { id: postId } })
+                    return Comment.destroy({ where: { PostId: postId } })
                 }
             })
-            .then(result => {
+            .then(() => {
+
+                return Post.destroy({ where: { id: postId } })
+            })
+            .then(() => {
                 res.redirect("/home")
             })
             .catch(err => {
+                console.log(err);
                 res.send(err)
             })
     }
