@@ -23,6 +23,9 @@ class Controller {
     }
 
     static login(req, res) {
+        if(req.session.userId) {
+            return res.redirect("/home")
+        }
         res.render('login', { error: req.query.err })
     }
 
@@ -71,13 +74,14 @@ class Controller {
                         caption: {
                             [Op.iLike]: `%${search}%`
                         }
-                    }
+                    },
                 ]
             }
         }
 
         Post.findAll(param)
             .then(post => {
+                // res.send(post)
                 res.render('home', { post, timeSince, userLogin })
             })
             .catch(err => {
@@ -153,9 +157,11 @@ class Controller {
 
     static profile(req, res) {
         const userLogin = req.session.userId
+        console.log(userLogin);
         const id = +req.params.id;
         User.findByPk(id, { include: { all: true } })
             .then(user => {
+                console.log(user.id);
                 res.render('profile', { user , userLogin})
             })
             .catch(err => {
@@ -165,8 +171,13 @@ class Controller {
 
     static editProfile(req, res) {
         const userLogin = req.session.userId
+        
+        
         Profile.findByPk(+req.params.id, { include: User })
             .then(profile => {
+                if(userLogin !== profile.User.id) {
+                    return res.redirect("/home")
+                }
                 res.render('edit-profile', { profile , userLogin})
             })
             .catch(err => {

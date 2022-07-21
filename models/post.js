@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       Post.hasMany(models.Comment, {
         foreignKey: 'PostId'
       }),
-        Post.belongsTo(models.User)
+        Post.belongsTo(models.User),
+        Post.belongsTo(models.Tag)
     }
 
     get date() {
