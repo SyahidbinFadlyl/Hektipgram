@@ -85,11 +85,18 @@ class Controller {
     }
 
     static commentSection(req, res) {
-        res.render('post-comment')
+        const id = +req.params.PostId
+        const userId = req.session.userId
+        Post.findByPk(id, { include: { all: true, nested: true } })
+            .then(post => {
+                res.render('post-comment', { post, timeSince, UserId: userId })
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 
     static likePost(req, res) {
-
         const id = +req.params.id
         Post.increment("like", { by: 1, where: { id: id } })
             .then(post => {
@@ -101,7 +108,6 @@ class Controller {
     }
 
     static unlikePost(req, res) {
-
         const id = +req.params.id
         Post.decrement("like", { by: 1, where: { id: id } })
             .then(post => {
@@ -113,9 +119,42 @@ class Controller {
     }
 
     static profile(req, res) {
-        User.findByPk(+req.session.userId, { include: Post })
+        User.findByPk(+req.session.userId, { include: { all: true } })
             .then(user => {
                 res.render('profile', { user })
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static editProfile(req, res) {
+        Profile.findByPk(+req.params.id)
+            .then(profile => {
+                res.render('edit-profile', { profile })
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static postProfile(req, res) {
+        let { fullName, gender, dateOfBirth, UserId } = req.body
+        Profile.update({ fullName, gender, dateOfBirth, UserId }, { where: { id: +req.params.id } })
+            .then((_) => {
+                res.redirect('/profile')
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static addCommentPostId(req, res) {
+        const { PostId, userId } = req.params
+        const { comment } = req.body
+        Comment.create({ comment, PostId, UserId: userId })
+            .then(result => {
+                res.redirect(`/comment/${PostId}`)
             })
             .catch(err => {
                 res.send(err)
