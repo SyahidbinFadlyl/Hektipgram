@@ -47,9 +47,9 @@ class Controller {
     }
 
     static home(req, res) {
-        Post.findAll({ 
+        Post.findAll({
             include: { all: true, nested: true },
-            order : [["createdAt", "desc" ]]
+            order: [["createdAt", "desc"]]
         })
             .then(post => {
                 res.render('home', { post })
@@ -67,6 +67,10 @@ class Controller {
 
     static postAddPost(req, res) {
 
+    }
+
+    static commentSection(req, res) {
+        res.render('post-comment')
     }
 
     static editPost(req, res) {
