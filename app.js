@@ -7,6 +7,7 @@ const port = 3000
 
 
 app.set("view engine", "ejs")
+app.use(express.static('images'))
 app.use(express.urlencoded({ extended: false }))
 app.use(session({
   secret: 'super secret information',
@@ -14,8 +15,6 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false }
 }))
-
-
 
 app.use(router)
 

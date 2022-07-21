@@ -1,5 +1,17 @@
 const Controller = require("../controller/user")
 const router = require("express").Router()
+const path = require('path')
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images')
+    },
+    filename: (req, file, cb) => {
+        console.log(file)
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({ storage: storage })
 
 router.get("/", Controller.login)
 router.post("/", Controller.postLogin)
@@ -18,6 +30,8 @@ router.use((req, res, next) => {
 
 router.get("/home", Controller.home)
 router.get("/post", Controller.addPost)
+router.post("/post", upload.single("imageUrl"), Controller.postAddPost)
+
 router.get("/comment/:PostId", Controller.commentSection)
 
 module.exports = router

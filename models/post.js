@@ -14,10 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       Post.hasMany(models.Comment, {
         foreignKey: 'PostId'
       }),
-      Post.belongsTo(models.User)
+        Post.belongsTo(models.User)
     }
 
-    get date(){
+    get date() {
       return this.createdAt.toLocaleString('id-ID')
     }
   }
@@ -28,9 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     UserId: DataTypes.INTEGER,
     like: DataTypes.INTEGER,
   }, {
-    hooks:{
+    hooks: {
       beforeCreate(post, options) {
         post.like = 0
+        post.imageUrl.slice(6)
       }
     },
     sequelize,
