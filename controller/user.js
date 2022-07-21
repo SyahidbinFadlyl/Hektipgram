@@ -1,4 +1,4 @@
-const { User, Profile } = require("../models")
+const { User, Profile, Post, Comment, Tag } = require("../models")
 const bcrypt = require('bcryptjs')
 
 class Controller {
@@ -46,7 +46,17 @@ class Controller {
     }
 
     static home(req, res) {
-        res.render('home')
+        
+        Post.findAll({include:{all:true, nested:true}})
+        .then(post => {
+            // res.send(post)
+            res.render('home', {post})
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(err)
+        })
+        
     }
 
     static addPost(req, res) {
