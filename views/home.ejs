@@ -32,7 +32,9 @@
                   <%= el.caption %>
                 </a>
               </h1>
-              <p class="text-grey-darker text-sm"><%= el.date %></p>
+              <p class="text-grey-darker text-sm">
+                <%= timeSince(el.createdAt) %> ago
+              </p>
             </header>
 
             <footer

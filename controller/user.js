@@ -1,5 +1,6 @@
 const { User, Profile, Post, Comment, Tag } = require("../models")
 const bcrypt = require('bcryptjs')
+const { timeSince } = require("../helper/helper")
 
 class Controller {
     static register(req, res) {
@@ -52,7 +53,7 @@ class Controller {
             order: [["createdAt", "desc"]]
         })
             .then(post => {
-                res.render('home', { post })
+                res.render('home', { post, timeSince })
             })
             .catch(err => {
                 console.log(err);
@@ -105,6 +106,16 @@ class Controller {
         Post.decrement("like", { by: 1, where: { id: id } })
             .then(post => {
                 res.redirect("/home")
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static profile(req, res) {
+        User.findByPk(+req.session.userId)
+            .then(user => {
+                res.render('profile', { user })
             })
             .catch(err => {
                 res.send(err)
