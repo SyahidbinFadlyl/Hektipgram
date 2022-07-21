@@ -1,6 +1,7 @@
 const { User, Profile, Post, Comment, Tag } = require("../models")
 const bcrypt = require('bcryptjs')
 const { timeSince } = require("../helper/helper")
+const { Op } = require("sequelize")
 
 class Controller {
     static register(req, res) {
@@ -54,12 +55,29 @@ class Controller {
 
 
     static home(req, res) {
-        Post.findAll({
+        const search = req.query.search
+        let param = {
             include: { all: true, nested: true },
             order: [["createdAt", "desc"]]
-        })
+        }
+
+        if (search) {
+            param.where = {
+                ...param.where,
+                [Op.or]: [
+                    {
+                        caption: {
+                            [Op.iLike]: `%${search}%`
+                        }
+                    }
+                ]
+            }
+        }
+
+        Post.findAll(param)
             .then(post => {
                 res.render('home', { post, timeSince })
+                // res.send(post)
             })
             .catch(err => {
                 console.log(err);
@@ -186,7 +204,16 @@ class Controller {
     }
 
     static postEditPost(req, res) {
-
+        const id = +req.params.id
+        const { TagId, UserId, caption } = req.body
+        Post.update({ TagId, UserId, caption }, { where: { id: id } })
+            .then(result => {
+                res.redirect(`/comment/${id}`)
+            })
+            .catch(err => {
+                console.log(err);
+                res.send(err)
+            })
     }
 
     static deletePost(req, res) {
