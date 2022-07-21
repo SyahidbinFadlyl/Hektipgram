@@ -1,4 +1,4 @@
-class Controller {
+class User {
 
     static login(req, res) {
 
@@ -39,4 +39,4 @@ class Controller {
 
 }
 
-module.exports = Controller
+module.exports = User
