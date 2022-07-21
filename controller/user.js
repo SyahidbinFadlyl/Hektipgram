@@ -79,12 +79,18 @@ class Controller {
             }
         }
 
+        let post;
         Post.findAll(param)
-            .then(post => {
-                // res.send(post)
-                res.render('home', { post, timeSince, userLogin })
+            .then(result => {
+                post = result
+                return Post.notification()
+            })
+            .then(result => {
+                const totalPost = result.dataValues.count
+                res.render('home', { post, timeSince, totalPost, userLogin })
             })
             .catch(err => {
+                console.log(err);
                 res.send(err)
             })
 
