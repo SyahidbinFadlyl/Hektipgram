@@ -1,8 +1,8 @@
-const User = require("../controller/user")
+const Controller = require("../controller/user")
 const router = require("express").Router()
 
-router.get("/", User.login)
-router.get("/register", User.register)
-router.get("/home", User.home)
+router.get("/", Controller.login)
+router.get("/register", Controller.register)
+router.get("/home", Controller.home)
 
 module.exports = router

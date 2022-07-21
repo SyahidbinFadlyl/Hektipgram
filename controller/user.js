@@ -1,4 +1,4 @@
-class User {
+class Controller {
     static login(req, res) {
         res.render('login')
     }
@@ -12,7 +12,7 @@ class User {
     }
 
     static home(req, res) {
-
+        res.render('home')
     }
 
     static addPost(req, res) {
@@ -38,4 +38,4 @@ class User {
 
 }
 
-module.exports = User
+module.exports = Controller
