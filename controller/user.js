@@ -14,7 +14,7 @@ class Controller {
                 return Profile.create({ fullName, gender, dateOfBirth, UserId: user.id })
             })
             .then(userProfile => {
-                res.send("sukses nambah user")
+                res.redirect(`/`)
             })
             .catch(err => {
                 res.send(err)
@@ -33,7 +33,9 @@ class Controller {
                 if (user && user.length !== 0) {
                     if (bcrypt.compareSync(password, user.password)) {
                         req.session.userId = user.id;
-                        return res.redirect('/home')
+                        req.session.role = user.role
+                        if (req.session.role === false) return res.redirect('/home')
+                        else return res.redirect('/admin')
                     } else {
                         return res.redirect(`/?err=${inv}`)
                     }
@@ -45,6 +47,11 @@ class Controller {
                 res.send(err)
             })
     }
+
+    static admin(req, res) {
+        res.send('ok')
+    }
+
 
     static home(req, res) {
         Post.findAll({

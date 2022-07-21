@@ -1,6 +1,5 @@
 const express = require('express')
 const router = require('./router/index')
-const fileUpload = require('express-fileupload');
 const session = require('express-session')
 const app = express()
 const port = 3000
