@@ -7,7 +7,7 @@
     <title>Register</title>
   </head>
   <body>
-    <div class="w-full h-screen font-sans bg-blue-400 bg-cover bg-landscape">
+    <div class="w-full h-screen font-sans bg-blue-800 bg-cover bg-landscape">
       <div
         class="container flex items-center justify-center flex-1 h-full mx-auto"
       >
@@ -35,13 +35,32 @@
 
               <div class="mb-2">
                 <div class="relative">
-                  <input
-                    type="text"
-                    id="gender"
-                    name="gender"
-                    class="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                    placeholder="Gender"
-                  />
+                  <div class="flex flex-wrap">
+                    <div class="flex items-center">
+                      <label class="text-white mx-3">Gender</label>
+                      <input
+                        id="gender"
+                        type="radio"
+                        value="Male"
+                        name="gender"
+                        class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500"
+                      />
+                      <label
+                        for="red-radio"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >Male</label
+                      >
+                      <input id="gender" type="radio" value=Female"
+                      name="gender" class="ml-3 w-4 h-4 text-red-600 bg-gray-100
+                      border-gray-300 focus:ring-red-500
+                      dark:focus:ring-red-600" />
+                      <label
+                        for="red-radio"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >Female</label
+                      >
+                    </div>
+                  </div>
                 </div>
               </div>
 
