@@ -3,6 +3,7 @@ const router = require("express").Router()
 
 router.get("/", Controller.login)
 router.get("/register", Controller.register)
+router.post("/register", Controller.postRegister)
 router.get("/home", Controller.home)
 
 module.exports = router
