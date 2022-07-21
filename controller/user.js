@@ -170,7 +170,19 @@ class Controller {
     }
 
     static editPost(req, res) {
-        //tes
+        const id = +req.params.id
+        let tag;
+        Tag.findAll()
+            .then(tags => {
+                tag = tags;
+                return Post.findByPk(id)
+            })
+            .then(post => {
+                res.render("editPost", { tag, post })
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 
     static postEditPost(req, res) {
