@@ -113,7 +113,7 @@ class Controller {
     }
 
     static profile(req, res) {
-        User.findByPk(+req.session.userId)
+        User.findByPk(+req.session.userId, { include: Post })
             .then(user => {
                 res.render('profile', { user })
             })
