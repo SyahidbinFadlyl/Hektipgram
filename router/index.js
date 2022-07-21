@@ -28,6 +28,7 @@ router.use((req, res, next) => {
     }
 })
 
+router.get("/admin", Controller.admin)
 router.get("/home", Controller.home)
 router.get("/post", Controller.addPost)
 router.get("/profile", Controller.profile)
