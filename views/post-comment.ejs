@@ -34,6 +34,8 @@
       />
       <div class="px-3 pb-2">
         <div class="pt-2">
+          <a href="/post/<%= post.id %>/like">❤️</a>
+          <a href="/post/<%= post.id %>/unlike">🖤</a>
           <i class="far fa-heart cursor-pointer"></i>
           <span class="text-sm text-gray-400 font-medium"
             ><%= post.like %> <%= post.like === 1 || post.like === 0 ?

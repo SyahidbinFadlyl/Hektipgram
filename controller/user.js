@@ -124,9 +124,10 @@ class Controller {
 
     static likePost(req, res) {
         const id = +req.params.id
+        console.log(id);
         Post.increment("like", { by: 1, where: { id: id } })
             .then(post => {
-                res.redirect("/home")
+                res.redirect(`/comment/${id}`)
             })
             .catch(err => {
                 res.send(err)
@@ -135,13 +136,19 @@ class Controller {
 
     static unlikePost(req, res) {
         const id = +req.params.id
-        Post.decrement("like", { by: 1, where: { id: id } })
-            .then(post => {
-                res.redirect("/home")
-            })
-            .catch(err => {
-                res.send(err)
-            })
+        Post.findByPk(id)
+        .then(post => {
+            if (post.like > 0) {
+                return Post.decrement("like", { by: 1, where: { id: id } })
+            }
+        })
+        .then(() => {
+            res.redirect(`/comment/${id}`)
+        })
+        .catch(err => {
+            console.log(err);
+            res.send(err)
+        })
     }
 
     static profile(req, res) {
@@ -256,9 +263,11 @@ class Controller {
 
     static admin(req, res) {
         const userLogin = req.session.userId
+        if(!req.session.role) {
+            return res.redirect("/")
+        }
         User.findAll({ include: { all: true } })
-            .then(user => {
-                // res.send(user)
+            .then(user => {   
                 res.render("deleteUser", { user, timeSince, userLogin})
             })
             .catch(err => {
@@ -268,10 +277,10 @@ class Controller {
 
     static deleteUser(req, res) {
         const id = +req.params.id
-        if (req.session.role === false) {
-            throw "anda bukan admin"
+        if(!req.session.role) {
+            return res.redirect("/")
         }
-
+        
         User.findByPk(id)
             .then(user => {
                 if (!user || user.length === 0) {
