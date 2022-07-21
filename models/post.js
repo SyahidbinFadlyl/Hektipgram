@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     get date() {
       return this.createdAt.toLocaleString('id-ID')
     }
+
+    static notification() {
+      return Post.findOne({
+        attributes: [
+          [sequelize.fn("count", sequelize.col("id")), "count"],
+        ]
+      })
+    }
   }
   Post.init({
     caption: DataTypes.TEXT,
