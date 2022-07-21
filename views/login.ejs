@@ -21,6 +21,11 @@
               <p class="mb-8 text-2xl font-light text-center text-white">
                 HEKTIPGRAM
               </p>
+
+              <% if(error) { %>
+              <p><%= error %></p>
+              <% } %>
+
               <div class="mb-2">
                 <div class="relative">
                   <input
