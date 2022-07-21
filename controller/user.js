@@ -73,6 +73,30 @@ class Controller {
         res.render('post-comment')
     }
 
+    static likePost(req, res) {
+
+        const id = +req.params.id
+        Post.increment("like", { by: 1, where: { id: id } })
+            .then(post => {
+                res.redirect("/home")
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static unlikePost(req, res) {
+
+        const id = +req.params.id
+        Post.decrement("like", { by: 1, where: { id: id } })
+            .then(post => {
+                res.redirect("/home")
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
     static editPost(req, res) {
 
     }
