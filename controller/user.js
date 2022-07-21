@@ -58,7 +58,7 @@ class Controller {
     }
 
     static addPost(req, res) {
-
+        res.render('add-post')
     }
 
     static postAddPost(req, res) {
