@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       }),
       Post.belongsTo(models.User)
     }
+
+    get date(){
+      return this.createdAt.toLocaleString('id-ID')
+    }
   }
   Post.init({
     caption: DataTypes.TEXT,
