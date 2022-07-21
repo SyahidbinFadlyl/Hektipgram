@@ -241,6 +241,46 @@ class Controller {
         })
     }
 
+    static admin(req, res) {
+
+        User.findAll({ include: { all: true } })
+            .then(user => {
+                // res.send(user)
+                res.render("deleteUser", { user, timeSince })
+            })
+            .catch(err => {
+                res.send(err)
+            })
+    }
+
+    static deleteUser(req, res) {
+        const id = +req.params.id
+        if (req.session.role === false) {
+            throw "anda bukan admin"
+        }
+
+        User.findByPk(id)
+            .then(user => {
+                if (!user || user.length === 0) {
+                    throw "User not found"
+                }
+                return Profile.destroy({ where: { UserId: id } })
+            })
+            .then(result => {
+                return Post.destroy({ where: { UserId: id } })
+            })
+            .then(result => {
+                return User.destroy({ where: { id: id } })
+            })
+            .then(result => {
+                res.redirect("/admin")
+            })
+            .catch(err => {
+                console.log(err);
+                res.send(err)
+            })
+    }
+
 }
 
 module.exports = Controller
