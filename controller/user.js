@@ -4,7 +4,7 @@ class User {
     }
 
     static register(req, res) {
-
+        res.render('register')
     }
 
     static posRegister(req, res) {
