@@ -46,17 +46,15 @@ class Controller {
     }
 
     static home(req, res) {
-        
-        Post.findAll({include:{all:true, nested:true}})
-        .then(post => {
-            // res.send(post)
-            res.render('home', {post})
-        })
-        .catch(err => {
-            console.log(err);
-            res.send(err)
-        })
-        
+        Post.findAll({ include: { all: true, nested: true } })
+            .then(post => {
+                res.render('home', { post })
+            })
+            .catch(err => {
+                console.log(err);
+                res.send(err)
+            })
+
     }
 
     static addPost(req, res) {
