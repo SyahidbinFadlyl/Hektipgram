@@ -50,7 +50,7 @@
               rows="1"
               class="border border-slate-500"
             ></textarea>
-            <button type="submit" >Comment</button>
+            <button type="submit">Comment</button>
           </form>
         </div>
         <% post.Comments.forEach(el => { %>
@@ -62,6 +62,17 @@
         </div>
         <% }) %>
       </div>
+      <% if (post.UserId === UserId) { %>
+      <div class="text-right">
+        <a href="/post/<%= post.id %>/delete">
+          <button
+            class="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          >
+            Delete Post
+          </button>
+        </a>
+      </div>
+      <% } %>
     </div>
   </body>
 </html>

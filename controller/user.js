@@ -171,7 +171,21 @@ class Controller {
     }
 
     static deletePost(req, res) {
-
+        const postId = +req.params.id
+        Post.findByPk(postId)
+            .then(post => {
+                if (post.UserId !== req.session.userId) {
+                    res.redirect("/home")
+                } else {
+                    return Post.destroy({ where: { id: postId } })
+                }
+            })
+            .then(result => {
+                res.redirect("/home")
+            })
+            .catch(err => {
+                res.send(err)
+            })
     }
 
     static logout(req, res) {
