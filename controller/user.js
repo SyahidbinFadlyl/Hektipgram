@@ -32,6 +32,7 @@ class Controller {
             .then(user => {
                 if (user && user.length !== 0) {
                     if (bcrypt.compareSync(password, user.password)) {
+                        req.session.userId = user.id;
                         return res.redirect('/home')
                     } else {
                         return res.redirect(`/?err=${inv}`)
@@ -46,7 +47,10 @@ class Controller {
     }
 
     static home(req, res) {
-        Post.findAll({ include: { all: true, nested: true } })
+        Post.findAll({ 
+            include: { all: true, nested: true },
+            order : [["createdAt", "desc" ]]
+        })
             .then(post => {
                 res.render('home', { post })
             })
