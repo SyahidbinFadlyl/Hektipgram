@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(post, options) {
         post.like = 0
-        post.imageUrl.slice(6)
+        post.imageUrl = post.imageUrl.slice(6)
       }
     },
     sequelize,
