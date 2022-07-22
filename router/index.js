@@ -44,5 +44,6 @@ router.get('/post/:id/delete', Controller.deletePost)
 router.get("/user/:id/delete", Controller.deleteUser)
 router.get("/post/:id/like", Controller.likePost)
 router.get("/post/:id/unlike", Controller.unlikePost)
+router.get("/comment/:PostId/:CommentId", Controller.deleteComment)
 
 module.exports = router

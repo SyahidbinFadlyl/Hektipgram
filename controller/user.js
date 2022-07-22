@@ -52,20 +52,14 @@ class Controller {
             })
     }
 
-    static admin(req, res) {
-        res.send('ok')
-    }
-
-
     static home(req, res) {
         const search = req.query.search
         const userLogin = req.session.userId
         let param = {
             include: { all: true, nested: true },
-            order: [["createdAt", "desc"]],
+            order: [["id", "desc"]],
             where: {}
         }
-        //res.send(post[0].User.userName)
         if (search) {
             param.where = {
                 ...param.where,
@@ -125,6 +119,7 @@ class Controller {
         const userId = req.session.userId
         Post.findByPk(id, { include: { all: true, nested: true } })
             .then(post => {
+                // res.send(post)
                 res.render('post-comment', { post, timeSince, UserId: userId, userLogin })
             })
             .catch(err => {
@@ -134,7 +129,7 @@ class Controller {
 
     static likePost(req, res) {
         const id = +req.params.id
-        console.log(id);
+        
         Post.increment("like", { by: 1, where: { id: id } })
             .then(post => {
                 res.redirect(`/comment/${id}`)
@@ -156,18 +151,16 @@ class Controller {
             res.redirect(`/comment/${id}`)
         })
         .catch(err => {
-            console.log(err);
             res.send(err)
         })
     }
 
     static profile(req, res) {
         const userLogin = req.session.userId
-        console.log(userLogin);
+        
         const id = +req.params.id;
         User.findByPk(id, { include: { all: true } })
             .then(user => {
-                console.log(user.id);
                 res.render('profile', { user , userLogin})
             })
             .catch(err => {
@@ -177,11 +170,9 @@ class Controller {
 
     static editProfile(req, res) {
         const userLogin = req.session.userId
-        
-        
         Profile.findByPk(+req.params.id, { include: User })
             .then(profile => {
-                if(userLogin !== profile.User.id) {
+                if(!profile || userLogin !== profile.User.id) {
                     return res.redirect("/home")
                 }
                 res.render('edit-profile', { profile , userLogin})
@@ -192,14 +183,15 @@ class Controller {
     }
 
     static postProfile(req, res) {
+        const userLogin = req.session.userId;
         
-        let { fullName, gender, dateOfBirth, UserId, userName, email } = req.body
+        let { fullName, gender, dateOfBirth, UserId, userName, email } = req.body;
         Profile.update({ fullName, gender, dateOfBirth, UserId }, { where: { id: +req.params.id } })
             .then((_) => {
                 return User.update({ userName, email }, { where: { id: +UserId } })
             })
             .then((_) => {
-                res.redirect('/profile')
+                res.redirect(`/profile/${userLogin}`)
             })
             .catch(err => {
                 res.send(err)
@@ -317,6 +309,19 @@ class Controller {
             .catch(err => {
                 res.send(err)
             })
+    }
+
+    static deleteComment(req, res) {
+        console.log(req.params);
+        const { PostId, CommentId} = req.params
+        
+        Comment.destroy({where:{id: CommentId}})
+        .then(()=>{
+            res.redirect(`/comment/${PostId}`)
+        })
+        .catch(err => {
+            res.send(err)
+        })
     }
 
 }

@@ -15,10 +15,12 @@
           <div
             class="rounded-full h-8 w-8 bg-gray-500 flex items-center justify-center overflow-hidden"
           >
+          <a href="/profile/<%= post.UserId %>">
             <img
               src="https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"
               alt="profilepic"
             />
+          </a>  
           </div>
           <span class="pt-1 ml-2 font-bold text-sm"
             ><%= post.User.userName %></span
@@ -43,9 +45,9 @@
           </span>
         </div>
         <div class="pt-1">
-          <div class="mb-2 text-sm">
-            <span class="font-medium mr-2"><%= post.User.userName %></span
-            ><%=post.caption %>
+          <div style="margin-top: 10px;" class="mb-2 text-sm">
+            <span style="font-size: 25; font-weight: bold;" class="font-medium mr-2"><%= post.User.userName %></span
+            > <h2 style="margin-top: 10px; font-size: large;margin-bottom: 30px;"><%=post.caption %></h2>
           </div>
         </div>
         <div class="text-sm mb-2 text-gray-400 cursor-pointer font-medium">
@@ -64,8 +66,12 @@
         <% post.Comments.forEach(el => { %>
         <div class="mb-2">
           <div class="mb-2 text-sm">
-            <span class="font-medium mr-2"><%= el.User.userName %></span> <%=
-            el.comment %>
+            <span style="font-size: 25; font-weight: bold;" class="font-medium mr-2"><%= el.User.userName %> :</span> 
+            <p style="border: solid; padding: 5px; margin-top: 6px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"><%=el.comment %></p>
+            <% if (el.UserId === userLogin) { %>
+              <a style="font-size: 10px; font-family: 'Times New Roman', Times, serif;" href="/comment/<%= post.id %>/<%= el.id %>">Delete this reply</a>
+            <% } %>
+            
           </div>
         </div>
         <% }) %>
